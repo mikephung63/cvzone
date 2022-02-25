@@ -51,12 +51,11 @@ class HandDetector:
         h, w, c = img.shape
         if self.results.multi_hand_landmarks:
             for handType, handLms in zip(self.results.multi_handedness, self.results.multi_hand_landmarks):
-                myHand = {}
                 ## lmList
                 mylmList = []
                 xList = []
                 yList = []
-                for id, lm in enumerate(handLms.landmark):
+                for lm in handLms.landmark:
                     px, py, pz = int(lm.x * w), int(lm.y * h), int(lm.z * w)
                     mylmList.append([px, py, pz])
                     xList.append(px)
@@ -70,10 +69,7 @@ class HandDetector:
                 cx, cy = bbox[0] + (bbox[2] // 2), \
                          bbox[1] + (bbox[3] // 2)
 
-                myHand["lmList"] = mylmList
-                myHand["bbox"] = bbox
-                myHand["center"] = (cx, cy)
-
+                myHand = {"lmList": mylmList, "bbox": bbox, "center": (cx, cy)}
                 if flipType:
                     if handType.classification[0].label == "Right":
                         myHand["type"] = "Left"
@@ -92,10 +88,7 @@ class HandDetector:
                                   (255, 0, 255), 2)
                     cv2.putText(img, myHand["type"], (bbox[0] - 30, bbox[1] - 30), cv2.FONT_HERSHEY_PLAIN,
                                 2, (255, 0, 255), 2)
-        if draw:
-            return allHands, img
-        else:
-            return allHands
+        return (allHands, img) if draw else allHands
 
     def fingersUp(self, myHand):
         """
@@ -113,11 +106,10 @@ class HandDetector:
                     fingers.append(1)
                 else:
                     fingers.append(0)
+            elif myLmList[self.tipIds[0]][0] < myLmList[self.tipIds[0] - 1][0]:
+                fingers.append(1)
             else:
-                if myLmList[self.tipIds[0]][0] < myLmList[self.tipIds[0] - 1][0]:
-                    fingers.append(1)
-                else:
-                    fingers.append(0)
+                fingers.append(0)
 
             # 4 Fingers
             for id in range(1, 5):
@@ -186,8 +178,8 @@ def main():
                 fingers2 = detector.fingersUp(hand2)
 
                 # Find Distance between two Landmarks. Could be same hand or different hands
-                length, info, img = detector.findDistance(lmList1[8][0:2], lmList2[8][0:2], img)  # with draw
-                # length, info = detector.findDistance(lmList1[8], lmList2[8])  # with draw
+                length, info, img = detector.findDistance(lmList1[8][:2], lmList2[8][:2], img)
+                            # length, info = detector.findDistance(lmList1[8], lmList2[8])  # with draw
         # Display
         cv2.imshow("Image", img)
         cv2.waitKey(1)
