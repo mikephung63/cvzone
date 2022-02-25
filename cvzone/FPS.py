@@ -32,10 +32,9 @@ class FPS:
             self.pTime = cTime
             if img is None:
                 return fps
-            else:
-                cv2.putText(img, f'FPS: {int(fps)}', pos, cv2.FONT_HERSHEY_PLAIN,
-                            scale, color, thickness)
-                return fps, img
+            cv2.putText(img, f'FPS: {int(fps)}', pos, cv2.FONT_HERSHEY_PLAIN,
+                        scale, color, thickness)
+            return fps, img
         except:
             return 0
 

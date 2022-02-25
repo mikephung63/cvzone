@@ -25,7 +25,7 @@ class LivePlot:
 
         self.yList = []
 
-        self.xList = [x for x in range(0, 100)]
+        self.xList = list(range(100))
         self.ptime = 0
 
     def update(self, y, color=(255, 0, 255)):
@@ -50,10 +50,8 @@ class LivePlot:
             if len(self.yList) == 100:
                 self.yList.pop(0)
 
-            for i in range(0, len(self.yList)):
-                if i < 2:
-                    pass
-                else:
+            for i in range(len(self.yList)):
+                if i >= 2:
                     cv2.line(self.imgPlot, (int((self.xList[i - 1] * (self.w // 100))) - (self.w // 10),
                                             self.yList[i - 1]),
                              (int((self.xList[i] * (self.w // 100)) - (self.w // 10)),

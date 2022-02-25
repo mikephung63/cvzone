@@ -51,8 +51,8 @@ class FaceMeshDetector:
                     self.mpDraw.draw_landmarks(img, faceLms, self.mpFaceMesh.FACEMESH_CONTOURS,
                                                self.drawSpec, self.drawSpec)
                 face = []
-                for id, lm in enumerate(faceLms.landmark):
-                    ih, iw, ic = img.shape
+                ih, iw, ic = img.shape
+                for lm in faceLms.landmark:
                     x, y = int(lm.x * iw), int(lm.y * ih)
                     face.append([x, y])
                 faces.append(face)

@@ -26,13 +26,11 @@ class SelfiSegmentation():
         results = self.selfieSegmentation.process(imgRGB)
         condition = np.stack(
             (results.segmentation_mask,) * 3, axis=-1) > threshold
-        if isinstance(imgBg, tuple):
-            _imgBg = np.zeros(img.shape, dtype=np.uint8)
-            _imgBg[:] = imgBg
-            imgOut = np.where(condition, img, _imgBg)
-        else:
-            imgOut = np.where(condition, img, imgBg)
-        return imgOut
+        if not isinstance(imgBg, tuple):
+            return np.where(condition, img, imgBg)
+        _imgBg = np.zeros(img.shape, dtype=np.uint8)
+        _imgBg[:] = imgBg
+        return np.where(condition, img, _imgBg)
 
 
 def main():

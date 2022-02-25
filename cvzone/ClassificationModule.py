@@ -24,12 +24,11 @@ class Classifier:
         self.data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
         self.labels_path = labelsPath
         if self.labels_path:
-            label_file = open(self.labels_path, "r")
-            self.list_labels = []
-            for line in label_file:
-                stripped_line = line.strip()
-                self.list_labels.append(stripped_line)
-            label_file.close()
+            with open(self.labels_path, "r") as label_file:
+                self.list_labels = []
+                for line in label_file:
+                    stripped_line = line.strip()
+                    self.list_labels.append(stripped_line)
         else:
             print("No Labels Found")
 

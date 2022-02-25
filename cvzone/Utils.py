@@ -38,12 +38,9 @@ def stackImages(_imgList, cols, scale):
     # put the images in a board
     hor = [imgBlank] * rows
     for y in range(rows):
-        line = []
-        for x in range(cols):
-            line.append(imgList[y * cols + x])
+        line = [imgList[y * cols + x] for x in range(cols)]
         hor[y] = np.hstack(line)
-    ver = np.vstack(hor)
-    return ver
+    return np.vstack(hor)
 
 
 def cornerRect(img, bbox, l=30, t=5, rt=1,
